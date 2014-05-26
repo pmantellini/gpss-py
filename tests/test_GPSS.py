@@ -22,8 +22,6 @@ class SystemTests(unittest.TestCase):
         system1 = System()
         system1.addSubSystem(subsystem1)
 
-        #TODO Como defino cuando para el sistema?? Hasta cuando hago advance clocks?
-
         system1.runSimulation()
 
 
