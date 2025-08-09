@@ -7,20 +7,19 @@ class CurrentEventsChain:
         self.transactions = []
 
     def addTransaction(self, transaction):
-        #TODO Implement transaction ordering logic
+        # Insert maintaining FIFO (simple for now)
         self.transactions.append(transaction)
 
     # Although the CEC is kept in priority order, the Active Transaction
     # is usually returned to the CEC ahead of its peers.
     def replaceActiveTransaction(self, transaction):
-        #TODO Implement transaction ordering logic
-        self.transactions.append(transaction)
+        # Reinsert at front (naive implementation)
+        self.transactions.insert(0, transaction)
 
     def removeActiveTransaction(self):
-        #TODO Implement active transaction selection logic
-        for transaction in self.transactions:
-            return transaction
-        return None
+        if not self.transactions:
+            return None
+        return self.transactions.pop(0)
 
 
 # The Future Events Chain (FEC) is a time-ordered chain which holds
@@ -30,13 +29,18 @@ class FutureEventsChain:
         self.transactions = []
 
     def addTransaction(self, transaction):
-        #TODO Implement transaction ordering logic
+        # Simple append; will sort when extracting
         self.transactions.append(transaction)
 
     def removeNextTransactions(self, clock_time):
-        transactions_to_remove = []
+        ready = []
+        remaining = []
         for transaction in self.transactions:
-            if transaction.getScheduledTime() == clock_time:
-                transactions_to_remove.append(transaction)
-
-        return transactions_to_remove
+            if transaction.getScheduledTime() <= clock_time:
+                # reset delayed flag now that it's ready
+                transaction.delayed = False
+                ready.append(transaction)
+            else:
+                remaining.append(transaction)
+        self.transactions = remaining
+        return ready

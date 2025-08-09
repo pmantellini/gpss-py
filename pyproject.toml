@@ -1,0 +1,15 @@
+[project]
+name = "gpss-py"
+version = "0.0.1"
+description = "Experimental GPSS-like discrete event simulation skeleton"
+authors = [ { name = "Your Name" } ]
+requires-python = ">=3.9"
+readme = "README.md"
+license = { text = "MIT" }
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["GPSS", "blocks", "chains"]
